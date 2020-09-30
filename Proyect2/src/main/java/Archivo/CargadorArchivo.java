@@ -5,7 +5,15 @@
  */
 package Archivo;
 
+import Datos.Administrador;
+import Datos.Cita;
+import Datos.Consulta;
+import Datos.ExamenLaboratorio;
+import Datos.Informe;
 import Datos.Laboratorista;
+import Datos.Medico;
+import Datos.Paciente;
+import Datos.Resultado;
 import java.util.ArrayList;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -19,6 +27,10 @@ public class CargadorArchivo {
 
     private ConvertidorXml convertidor = new ConvertidorXml();
     
+    /**
+     * Carga archivos y los carga a la base de datos
+     * @param path 
+     */
     public void CargarArchivos(String path){
         convertidor.TransformarPathXML(path);
         ArrayList<NodeList> listasNodos = convertidor.GetElements();
@@ -36,36 +48,37 @@ public class CargadorArchivo {
                 elementoLista = (Element) nodo; 
                     switch(indexListaNodos){
                         case 0:
-                            
+                            new Administrador().SubirArchivo(elementoLista);
                             break;
                         case 1:
-
+                            new Medico().SubirArchivo(elementoLista);
                             break;
                         case 2:
                             new Laboratorista().SubirArchivo(elementoLista);
                             break;
                         case 3:
-
+                            new Paciente().SubirArchivo(elementoLista);
                             break;
                         case 4:
-
+                            new ExamenLaboratorio().SubirArchivo(elementoLista);
                             break;
                         case 5:
-
+                            new Informe().SubirArchivo(elementoLista);
                             break;
                         case 6:
-
+                            new Resultado().SubirArchivo(elementoLista);
                             break;
                         case 7:
-
+                            new Cita().SubirArchivo(elementoLista);
                             break;
                         case 8:
-
+                            new Consulta().SubirArchivo(elementoLista);
                             break;
                     }    
                 }
                    
             }
         }
+        System.out.println("FINAL CARGA");
     }
 }

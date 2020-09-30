@@ -5,6 +5,10 @@
  */
 package Datos;
 
+import SQL.Conexion;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import org.w3c.dom.Element;
 
 /**
@@ -19,6 +23,7 @@ public class Consulta {
         try {
             tipo = elementoXML.getElementsByTagName("TIPO").item(0).getTextContent();
             costo = Double.parseDouble(elementoXML.getElementsByTagName("COSTO").item(0).getTextContent());
+            this.SubirArchivoParametros(tipo, costo);
         } catch (Exception ex) {
             System.out.println("Uno de los formatos del archivo no esta bien,"
                     + "revisar su archivo de entrada en: "+tipo+"\n Error: "+ex.getMessage());
@@ -27,6 +32,20 @@ public class Consulta {
     }
     
     public void SubirArchivoParametros(String tipo, double costo){
-        
+       try {
+            
+                Connection connection = new Conexion().CreateConnection();
+                String comando = "INSERT INTO CONSULTA (Tipo,Costo) VALUES (?,?)";
+                PreparedStatement statement = null;
+                statement = connection.prepareStatement(comando);
+                statement.setString(1, tipo);
+                statement.setDouble(2, costo);
+                statement.executeUpdate();
+                
+                //Solo copiar esto a las otras clases colocar la nueva base de datos ya modificaa, y de ultimo se agrega todas las clases restantes
+                //de lista, se hace la interfaz de empleado y cliente y alli estaria
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } 
     }
 }

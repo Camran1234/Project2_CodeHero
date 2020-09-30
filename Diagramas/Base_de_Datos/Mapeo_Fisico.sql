@@ -24,13 +24,6 @@ PRIMARY KEY (CODIGO),
 FOREIGN KEY(Codigo_Hospital) REFERENCES HOSPITAL(Registro_Propiedad)
 );
 
-CREATE TABLE IF NOT EXISTS TITULO (
-No_Registro INT NOT NULL AUTO_INCREMENT,
-Codigo_Medico Varchar(45) NOT NULL,
-Especialidad Varchar(150) NOT NULL,
-PRIMARY KEY(No_Registro)
-);
-
 CREATE TABLE IF NOT EXISTS MEDICO (
 Codigo Varchar(45) NOT NULL,
 Nombre Varchar(100) NOT NULL,
@@ -46,6 +39,15 @@ Codigo_Hospital Varchar(45),
 PRIMARY KEY (Codigo),
 FOREIGN KEY (Codigo_Hospital) REFERENCES HOSPITAL(Registro_Propiedad)
 );
+
+CREATE TABLE IF NOT EXISTS TITULO (
+No_Registro INT NOT NULL AUTO_INCREMENT,
+Codigo_Medico Varchar(45) NOT NULL,
+Especialidad Varchar(150) NOT NULL,
+PRIMARY KEY(No_Registro),
+FOREIGN KEY(Codigo_Medico) REFERENCES MEDICO(Codigo)
+);
+
 
 CREATE TABLE IF NOT EXISTS LABORATORISTA (
 Codigo Varchar(45) NOT NULL,
@@ -74,7 +76,7 @@ FOREIGN KEY(Codigo_Hospital) REFERENCES HOSPITAL(Registro_Propiedad)
 );
 
 CREATE TABLE IF NOT EXISTS CONSULTA (
-Codigo Varchar(45) NOT NULL,
+Codigo INT NOT NULL AUTO_INCREMENT,
 Tipo Varchar(100) NOT NULL,
 Costo Double NOT NULL,
 PRIMARY KEY(Codigo)
@@ -84,6 +86,9 @@ CREATE TABLE IF NOT EXISTS EXAMENES_LABORATORIO (
 Codigo Varchar(45) NOT NULL,
 Nombre Varchar(200) NOT NULL,
 Requerimiento_Orden BOOLEAN NOT NULL,
+Descripcion TEXT NOT NULL,
+Costo Double NOT NULL,
+Informe VARCHAR(50) NOT NULL,
 PRIMARY KEY(Codigo)
 );
 
@@ -92,7 +97,6 @@ No_Registro Varchar(45) NOT NULL,
 Orden_Medico Varchar(500) NOT NULL,
 Hora VARCHAR(5) NOT NULL,
 Fecha VARCHAR(15) NOT NULL,
-Examen_Realizado BOOLEAN NOT NULL,
 Codigo_Laboratorista Varchar(45) NOT NULL,
 Codigo_Paciente VARCHAR(45) NOT NULL,
 Codigo_Examen Varchar(45) NOT NULL,
@@ -107,34 +111,47 @@ FOREIGN KEY (Codigo_Medico) REFERENCES MEDICO(Codigo)
 
 CREATE TABLE IF NOT EXISTS RESULTADO (
 No_Registro VARCHAR(45) NOT NULL,
-No_Registro_Examen Varchar(100) NOT NULL,
-Informe_Examen TEXT NOT NULL,
+Orden VARCHAR(1000),
+Informe VARCHAR(1000) NOT NULL,
+Fecha Varchar(15) NOT NULL,
+Hora VARCHAR(5) NOT NULL,
+Paciente VARCHAR(45) NOT NULL,
+Medico Varchar(45),
+Examen Varchar(45) NOT NULL,
+Laboratorista VARCHAR(45) NOT NULL,		
 PRIMARY KEY (No_Registro),
-FOREIGN KEY (No_Registro_Examen) REFERENCES REGISTRO_EXAMEN(No_Registro)
+FOREIGN KEY (Paciente) REFERENCES PACIENTE(Codigo),
+FOREIGN KEY (Medico) REFERENCES MEDICO(Codigo),
+FOREIGN KEY (Laboratorista) REFERENCES LABORATORISTA(Codigo),
+FOREIGN KEY (Examen) REFERENCES EXAMENES_LABORATORIO(Codigo)
 );
 
 CREATE TABLE IF NOT EXISTS INFORME_MEDICO (
 No_Registro Varchar(45) NOT NULL,
-Descripcion TEXT NOT NULL,
+Paciente VARCHAR(45) NOT NULL,
+Medico VARCHAR(45) NOT NULL,
+Informe TEXT NOT NULL,
 Fecha Varchar(12) NOT NULL,
 Hora VARCHAR(5) NOT NULL,
-PRIMARY KEY(No_Registro)
+PRIMARY KEY(No_Registro),
+FOREIGN KEY (Paciente) REFERENCES PACIENTE(Codigo),
+FOREIGN KEY (Medico) REFERENCES MEDICO(Codigo)
 );
+
 
 CREATE TABLE IF NOT EXISTS REGISTRO_CITAS (
 No_Registro Varchar(45) NOT NULL,
 Fecha_Cita Varchar(12) NOT NULL,
 Hora_Cita Varchar(5) NOT NULL,
-Cita_Realizada BOOLEAN NOT NULL,
+Cita_Realizada BOOLEAN,
 Codigo_Paciente Varchar(45) NOT NULL,
 Codigo_Medico Varchar(45) NOT NULL,
-Registro_Titulo INT NOT NULL,
-Registro_Consulta Varchar(45) NOT NULL,
+Registro_Titulo TEXT,
+Registro_Consulta INT,
 Informe_Cita Varchar(45),
 PRIMARY KEY (No_Registro),
 FOREIGN KEY (Codigo_Paciente) REFERENCES PACIENTE (Codigo),
 FOREIGN KEY (Codigo_Medico) REFERENCES MEDICO (Codigo),
-FOREIGN KEY (Registro_Titulo) REFERENCES TITULO (No_Registro),
 FOREIGN KEY (Registro_Consulta) REFERENCES CONSULTA (Codigo),
 FOREIGN KEY (Informe_Cita) REFERENCES INFORME_MEDICO (No_Registro)
 );

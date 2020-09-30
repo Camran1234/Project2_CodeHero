@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -54,6 +56,25 @@ public class Archivo {
             return null;
         }
         
+    }
+    
+    /**
+     * Abre un seleccionador de archivos, y devuelve el archivo seleccionado
+     * @return
+     */
+    public String getPathFile(){
+        try{
+            JFileChooser file = new JFileChooser();
+            /*file.addChoosableFileFilter(new FileNameExtensionFilter("text") );
+            file.setAcceptAllFileFilterUsed(false);*/
+            int seleccion = file.showOpenDialog(new JFrame());
+            if(seleccion == javax.swing.JFileChooser.APPROVE_OPTION){
+                return (file.getSelectedFile().getPath());
+            }
+        }catch(Throwable e){
+            e.printStackTrace();
+        }
+        return null;
     }
     
 }

@@ -10,5 +10,6 @@ com/mycompany/project2_codehero/Main.class
 Datos/Usuario.class
 Datos/Paciente.class
 Archivo/Archivo.class
+SQL/Conexion.class
 Archivo/ConvertidorXml.class
 Datos/Cita.class

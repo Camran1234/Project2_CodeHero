@@ -10,6 +10,7 @@
     <name>Proyect2</name>
 
     <properties>
+        
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -21,14 +22,21 @@
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
+         <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.20</version>
+        </dependency>
     </dependencies>
 
     <build>
+        <finalName>CodeHero</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
+                
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
