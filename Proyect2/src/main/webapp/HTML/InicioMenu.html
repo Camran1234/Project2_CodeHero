@@ -1,4 +1,25 @@
-<form method = "post" action="add">
-    <input type="submit" value = "Cargar Archivo"/> 
+<style>
+input.ex1 {
+  padding: 15px;
+}        
+</style>
+    
+<form method = "POST" action="HTML/cargarArchivos.jsp">
+    <input class="ex1" type="submit" value = "Cargar Archivo"/> 
     </br></br></br>
 </form>
+
+<div id="options" onclick="funcion()">
+    <form method ="post" action="HTML/startSession.jsp">
+        <h3 style="text-align:center">INGRESAR SESION</h3>
+        <input class="ex1" type="text" style="margin:0px auto; display:block;" name="codigo" placeholder="Ingrese su codigo de usuario" size="50%" required/> <br>
+        <input class="ex1" type="password" style="margin:0px auto; display:block;" name="password" placeholder="Ingrese su password de usuario" size="50%" required/> <br>
+        <input class="ex1" type="submit" style="margin:0px auto; display:block;" value = "Acceder"/> <br>
+    </form>        
+</div>
+
+
+
+
+
+

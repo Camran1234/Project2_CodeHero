@@ -31,7 +31,8 @@ public class CargadorArchivo {
      * Carga archivos y los carga a la base de datos
      * @param path 
      */
-    public void CargarArchivos(String path){
+    public ArrayList<String> CargarArchivos(String path){
+        ArrayList<String> nodosCargados = new ArrayList<>();
         convertidor.TransformarPathXML(path);
         ArrayList<NodeList> listasNodos = convertidor.GetElements();
         Element elementoLista;
@@ -43,7 +44,7 @@ public class CargadorArchivo {
             
             for(int indexElementos=0;indexElementos<listaAuxiliar.getLength();indexElementos++){
                 nodo = listaAuxiliar.item(indexElementos);
-                System.out.println("Current node name: "+ nodo.getNodeName());
+                nodosCargados.add("Current node name: "+ nodo.getNodeName());
                 if(nodo.getNodeType() == Node.ELEMENT_NODE){
                 elementoLista = (Element) nodo; 
                     switch(indexListaNodos){
@@ -79,6 +80,6 @@ public class CargadorArchivo {
                    
             }
         }
-        System.out.println("FINAL CARGA");
+        return nodosCargados;
     }
 }
