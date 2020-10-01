@@ -41,7 +41,7 @@ public class Informe {
         }
     }
     
-    public void SubirArchivoParametros(String codigo, String paciente, String medico, String informe, String fecha, String hora){
+    public boolean SubirArchivoParametros(String codigo, String paciente, String medico, String informe, String fecha, String hora){
         try {  
                 
             Connection connection = new Conexion().CreateConnection();
@@ -56,10 +56,12 @@ public class Informe {
             statement.setString(5, fecha);
             statement.setString(6, hora);
             statement.executeUpdate();
+            return true;
                 //Solo copiar esto a las otras clases colocar la nueva base de datos ya modificaa, y de ultimo se agrega todas las clases restantes
                 //de lista, se hace la interfaz de empleado y cliente y alli estaria
         } catch (SQLException ex) {
-               ex.printStackTrace();
+            ex.printStackTrace();
+            return false;
         }    
     }
 }

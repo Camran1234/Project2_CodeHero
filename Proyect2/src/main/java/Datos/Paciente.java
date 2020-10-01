@@ -46,7 +46,7 @@ public class Paciente extends Usuario{
         }
     }
     
-    public void SubirArchivoParametros(String codigo, String nombre, Long DPI, int telefono, String sexo, String fechaNacimiento,
+    public boolean SubirArchivoParametros(String codigo, String nombre, Long DPI, int telefono, String sexo, String fechaNacimiento,
             String tipoSangre, double peso, String password, String correoElectronico){
         try {
                 Connection connection = new Conexion().CreateConnection();
@@ -65,9 +65,11 @@ public class Paciente extends Usuario{
                 statement.setString(9, tipoSangre);
                 statement.setString(10, correoElectronico);
                 statement.executeUpdate();
+                return true;
                 //Ssolo copiar esto a las otras clases colocar la nueva base de datos ya modificaa, y de ultimo se agrega todas las clases restantes
                 //de lista, se hace la interfaz de empleado y cliente y alli estaria
         } catch (SQLException ex) {
+            return false;
         }
     }
     

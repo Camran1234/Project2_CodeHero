@@ -63,7 +63,7 @@ public class ExamenLaboratorio {
      * @param costo
      * @param informe
      */
-    public void SubirArchivoParametros(String codigo, String nombre, Boolean orden, String descripcion, double costo, String informe){
+    public boolean SubirArchivoParametros(String codigo, String nombre, Boolean orden, String descripcion, double costo, String informe){
         try {  
                 
             Connection connection = new Conexion().CreateConnection();
@@ -77,10 +77,12 @@ public class ExamenLaboratorio {
             statement.setDouble(5, costo);
             statement.setString(6, informe);
             statement.executeUpdate();
+            return true;
                 //Solo copiar esto a las otras clases colocar la nueva base de datos ya modificaa, y de ultimo se agrega todas las clases restantes
                 //de lista, se hace la interfaz de empleado y cliente y alli estaria
         } catch (SQLException ex) {
                ex.printStackTrace();
+               return false;
         }    
     }
 }

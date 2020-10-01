@@ -48,7 +48,7 @@ public class Resultado {
         
     }
     
-    public void SubirArchivoParametros(String codigo, String paciente, String medico, String examen,
+    public boolean SubirArchivoParametros(String codigo, String paciente, String medico, String examen,
             String laboratorista, String orden, String informe, String fecha, String hora){
         try {  
             
@@ -101,10 +101,10 @@ public class Resultado {
                 }
 
             }
-            
-            
+            return true;
         } catch (SQLException ex) {
-               ex.printStackTrace();
+            ex.printStackTrace();
+            return false;
         }
     }
 }

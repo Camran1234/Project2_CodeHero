@@ -57,7 +57,7 @@ public class Cita {
         }
     }
     
-    public void SubirArchivoParametros(String codigo, String paciente, Boolean citaRealizada,String medico,ArrayList<String> especialidad, String fecha,
+    public boolean SubirArchivoParametros(String codigo, String paciente, Boolean citaRealizada,String medico,ArrayList<String> especialidad, String fecha,
             String hora,String codigoConsulta, String informeCita){
         try {  
             String especialidades="";
@@ -136,9 +136,11 @@ public class Cita {
             this.especialidad = new ArrayList<>();
                 //Solo copiar esto a las otras clases colocar la nueva base de datos ya modificaa, y de ultimo se agrega todas las clases restantes
                 //de lista, se hace la interfaz de empleado y cliente y alli estaria
+            return true;
         } catch (SQLException ex) {
-               ex.printStackTrace();
-               JOptionPane.showMessageDialog(null, "Los formatos de la cita: "+codigo+" son incorrectos "+ex.getMessage());
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Los formatos de la cita: "+codigo+" son incorrectos "+ex.getMessage());
+            return false;
         }
     }
 }

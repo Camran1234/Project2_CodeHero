@@ -35,7 +35,7 @@ public class Administrador extends Usuario{
         }
     }
     
-    public void SubirArchivoParametros(String codigo, String nombre, Long DPI, String password){
+    public boolean SubirArchivoParametros(String codigo, String nombre, Long DPI, String password){
         try {
                 Connection connection = new Conexion().CreateConnection();
                 String comando = "INSERT INTO ADMINISTRADOR (Codigo,Nombre,DPI,Password) VALUES (?,?,?,?)";
@@ -48,11 +48,13 @@ public class Administrador extends Usuario{
                 statement.executeUpdate();
                 System.out.println("Subido");
                 connection.close();
+                return true;
                 //Ssolo copiar esto a las otras clases colocar la nueva base de datos ya modificaa, y de ultimo se agrega todas las clases restantes
                 //de lista, se hace la interfaz de empleado y cliente y alli estaria
             } catch (SQLException ex) {
                 System.out.println("ERROR EN ADMIN: "+codigo);
                 ex.printStackTrace();
+                return false;
             }
     }
     

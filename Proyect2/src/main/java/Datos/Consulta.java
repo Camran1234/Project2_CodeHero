@@ -31,7 +31,7 @@ public class Consulta {
         }
     }
     
-    public void SubirArchivoParametros(String tipo, double costo){
+    public boolean SubirArchivoParametros(String tipo, double costo){
        try {
             
                 Connection connection = new Conexion().CreateConnection();
@@ -41,11 +41,12 @@ public class Consulta {
                 statement.setString(1, tipo);
                 statement.setDouble(2, costo);
                 statement.executeUpdate();
-                
+                return true;
                 //Solo copiar esto a las otras clases colocar la nueva base de datos ya modificaa, y de ultimo se agrega todas las clases restantes
                 //de lista, se hace la interfaz de empleado y cliente y alli estaria
         } catch (SQLException ex) {
             ex.printStackTrace();
+            return false;
         } 
     }
 }

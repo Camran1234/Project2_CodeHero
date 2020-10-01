@@ -1,0 +1,32 @@
+<form action="../addNewData" method="post"><!-- Esta parte mostrara una interfaz del medico -->
+                <h1>Examen Laboratorio</h1>
+                <label>
+                    Codigo: 
+                    <input type="text"  name="codigoM" placeholder="Ingrese codigo examen" required/> <br>
+                </label>
+                <label>
+                    Nombre: 
+                    <input type="text"  name="nombre" placeholder="Ingrese nombre examen" required/> <br>
+                </label>
+                <label>
+                    Requerimiento_Orden 
+                    <select name="requerimientoOrden"  required>
+                        <option value="TRUE">SI</option>
+                        <option value="FALSE">NO</option>
+                    </select>
+                </label>
+                <label>
+                    Descripcion:
+                    <input type="text"  name="descripcion" placeholder="Ingrese descripcion examen"  required/> <br>
+                </label>
+                <label>
+                    Costo: 
+                    <input type="text"  name="costo" placeholder="Ingrese Costo examen" required/> <br>
+                </label>
+                <label>
+                    Informe
+                    <input type="text"  name="informe" placeholder="Ingrese formato informe examen" required/> <br>
+                </label>
+                
+                <input type="submit"  name = "boton" value = "Ingresar Examen"/> <br>
+</form>

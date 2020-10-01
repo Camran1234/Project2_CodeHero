@@ -58,7 +58,7 @@ public class Laboratorista extends Usuario{
         }
     }
     
-    public void SubirArchivoParametros(String codigo, String nombre, Long DPI, int telefono, String examen, String correo,ArrayList<String> diasTrabajo, String trabajo, String password, String registro){
+    public boolean SubirArchivoParametros(String codigo, String nombre, Long DPI, int telefono, String examen, String correo,ArrayList<String> diasTrabajo, String trabajo, String password, String registro){
         try {
             String dias="";
                 for(int indexArray=0;indexArray<diasTrabajo.size();indexArray++){
@@ -81,10 +81,11 @@ public class Laboratorista extends Usuario{
                 statement.setString(9, correo);
                 statement.setString(10, trabajo);
                 statement.executeUpdate();
-                
+                return true;
                 //Solo copiar esto a las otras clases colocar la nueva base de datos ya modificaa, y de ultimo se agrega todas las clases restantes
                 //de lista, se hace la interfaz de empleado y cliente y alli estaria
         } catch (SQLException ex) {
+            return false;
         }
     }
 }

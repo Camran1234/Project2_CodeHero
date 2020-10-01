@@ -33,7 +33,7 @@ public class CorroboradorUsuario {
             ResultSet resultado = statement.executeQuery();
             if(resultado.next()){
                 comprobadorCodigo = resultado.getString("Codigo");
-                if(comprobadorCodigo.equalsIgnoreCase("") || comprobadorCodigo==null){
+                if(comprobadorCodigo.equalsIgnoreCase("")==false || comprobadorCodigo!=null){
                     return "ADMINISTRADOR";
                 }
             }
@@ -46,7 +46,7 @@ public class CorroboradorUsuario {
             resultado = statement.executeQuery();
             if(resultado.next()){
                 comprobadorCodigo = resultado.getString("Codigo");
-                if(comprobadorCodigo.equalsIgnoreCase("") || comprobadorCodigo==null){
+                if(comprobadorCodigo.equalsIgnoreCase("")==false || comprobadorCodigo!=null){
                     return "MEDICO";
                 }
             }
@@ -59,7 +59,7 @@ public class CorroboradorUsuario {
             resultado = statement.executeQuery();
             if(resultado.next()){
                 comprobadorCodigo = resultado.getString("Codigo");
-                if(comprobadorCodigo.equalsIgnoreCase("") || comprobadorCodigo==null){
+                if(comprobadorCodigo.equalsIgnoreCase("")==false || comprobadorCodigo!=null){
                     return "LABORATORISTA";
                 }
             }
@@ -72,7 +72,7 @@ public class CorroboradorUsuario {
             resultado = statement.executeQuery();
             if(resultado.next()){
                 comprobadorCodigo = resultado.getString("Codigo");
-                if(comprobadorCodigo.equalsIgnoreCase("") || comprobadorCodigo==null){
+                if(comprobadorCodigo.equalsIgnoreCase("")==false || comprobadorCodigo!=null){
                     return "PACIENTE";
                 }
             }
