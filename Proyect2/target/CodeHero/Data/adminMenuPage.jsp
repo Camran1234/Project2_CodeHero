@@ -20,7 +20,7 @@ input.ex1 {
         <input class="ex1" type="submit" style="margin:0px auto; display:block;" name="Agregar" value = "Agregar Dato" size="50%" required/> <br>
     </form>            
 
-<form method="post" action="../Data/adminModifyPage.jsp">
+<form method="post" action="../Modificadores/adminModifyPage.jsp">
     <select name="opcionModificarDato" style="margin:0px auto; display:block;" required>
                     <option value="medico">Medico</option>
                     <option value="laboratorista">Laboratorista</option>

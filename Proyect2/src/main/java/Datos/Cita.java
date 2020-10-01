@@ -134,8 +134,7 @@ public class Cita {
             
             
             this.especialidad = new ArrayList<>();
-                //Solo copiar esto a las otras clases colocar la nueva base de datos ya modificaa, y de ultimo se agrega todas las clases restantes
-                //de lista, se hace la interfaz de empleado y cliente y alli estaria
+            connection.close();
             return true;
         } catch (SQLException ex) {
             ex.printStackTrace();

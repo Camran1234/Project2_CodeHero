@@ -81,9 +81,8 @@ public class Laboratorista extends Usuario{
                 statement.setString(9, correo);
                 statement.setString(10, trabajo);
                 statement.executeUpdate();
+                connection.close();
                 return true;
-                //Solo copiar esto a las otras clases colocar la nueva base de datos ya modificaa, y de ultimo se agrega todas las clases restantes
-                //de lista, se hace la interfaz de empleado y cliente y alli estaria
         } catch (SQLException ex) {
             return false;
         }

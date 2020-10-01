@@ -91,8 +91,6 @@ public class Resultado {
             statement.setString(8, examen);
             statement.setString(9, laboratorista);
             statement.executeUpdate();
-                //Solo copiar esto a las otras clases colocar la nueva base de datos ya modificaa, y de ultimo se agrega todas las clases restantes
-                //de lista, se hace la interfaz de empleado y cliente y alli estaria
             }else{
                 if((orden==null || orden.equalsIgnoreCase(""))){
                     JOptionPane.showMessageDialog(null, "Se requeria una orden y no se imprimio ninguna en el resultado");
@@ -101,6 +99,7 @@ public class Resultado {
                 }
 
             }
+            connection.close();
             return true;
         } catch (SQLException ex) {
             ex.printStackTrace();

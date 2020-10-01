@@ -77,9 +77,8 @@ public class ExamenLaboratorio {
             statement.setDouble(5, costo);
             statement.setString(6, informe);
             statement.executeUpdate();
+            connection.close();
             return true;
-                //Solo copiar esto a las otras clases colocar la nueva base de datos ya modificaa, y de ultimo se agrega todas las clases restantes
-                //de lista, se hace la interfaz de empleado y cliente y alli estaria
         } catch (SQLException ex) {
                ex.printStackTrace();
                return false;

@@ -65,9 +65,8 @@ public class Paciente extends Usuario{
                 statement.setString(9, tipoSangre);
                 statement.setString(10, correoElectronico);
                 statement.executeUpdate();
+                connection.close();
                 return true;
-                //Ssolo copiar esto a las otras clases colocar la nueva base de datos ya modificaa, y de ultimo se agrega todas las clases restantes
-                //de lista, se hace la interfaz de empleado y cliente y alli estaria
         } catch (SQLException ex) {
             return false;
         }

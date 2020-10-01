@@ -152,7 +152,7 @@ public class addNewData extends HttpServlet {
         }catch(Exception ex){   
             try (PrintWriter out = response.getWriter()) {
                 out.println("<h1> Formatos Incorrectos en el paciente</h1>");
-                out.println("<a href="+"../adminMenuPage.jsp"+">Regresar</a>");
+                out.println("<a href="+"./Data/adminMenuPage.jsp"+">Regresar</a>");
             }
         }
         
