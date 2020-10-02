@@ -40,6 +40,10 @@ public class LectorUsuarios {
                return null;
         }   
     }
+    /**
+     * Retorna una lista con los codigos de los pacientes en la base de datos
+     * @return 
+     */
     public ArrayList<String> GetCodigoPaciente(){
         try {  
             ArrayList<String> codigos = new ArrayList<>();
@@ -121,6 +125,30 @@ public class LectorUsuarios {
             
             while(resultado.next()){
                 codigos.add(resultado.getString("Codigo"));
+            }
+            return codigos;
+        } catch (SQLException ex) {
+               ex.printStackTrace();
+               return null;
+        }   
+    }
+    
+    /**
+     * Retorna los codigos de las citas donde no se han realizado y el encargado es el codigo del doctor indicado
+     * @return 
+     */
+    public ArrayList<String> GetCodigoCitas(String codigoMedico){
+        try {  
+            ArrayList<String> codigos = new ArrayList<>();
+            Connection connection = new Conexion().CreateConnection();
+            String comando = "SELECT No_Registro FROM REGISTRO_CITAS WHERE Cita_Realizada=false AND Codigo_Medico=(?)";
+            PreparedStatement statement = null;
+            statement = connection.prepareStatement(comando);
+            statement.setString(1, codigoMedico);
+            ResultSet resultado = statement.executeQuery();
+            
+            while(resultado.next()){
+                codigos.add(resultado.getString("No_Registro"));
             }
             return codigos;
         } catch (SQLException ex) {

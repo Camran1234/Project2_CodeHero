@@ -17,8 +17,15 @@
         
     
 <%
-    String usuario = request.getParameter("codigo");
+        String usuario = request.getParameter("codigo");
     String password = request.getParameter("password");
+    if(usuario==null && password ==null){
+        usuario = (String)session.getAttribute("codigoSession");
+        password = (String)session.getAttribute("passwordSession");
+    }
+    session.setAttribute("codigoSession", usuario);
+    session.setAttribute("passwordSession", password);
+    
     String respuesta = new CorroboradorUsuario().CheckLogIn(usuario, password);
     if(respuesta!=null){
         %>
@@ -32,12 +39,12 @@
                 break;    
             case "MEDICO":  
             %>
-                
+                <%@ include file = "../Data/medicoMenuPage.jsp"%>
             <%
                 break;    
             case "LABORATORISTA":
             %>
-            
+                
             <%
                 break;
             case "PACIENTE":

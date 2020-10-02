@@ -31,7 +31,7 @@ input.ex1 {
     <input type="submit" class="ex1" style="margin:0px auto; display:block;" name="Modificar" value="Modificar Dato" size="50%" required/><br>
 </form>
         
-<form method="post" action="../Data/adminReportes.jsp">
+<form method="post" action="../HTML/startSession.jsp">
     <input class="ex1" type="submit" style="margin:0px auto; display:block;" value = "Reportes"/> <br>
 </form>
 <a href="../menuInicio.jsp">Regresar</a>
