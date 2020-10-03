@@ -58,6 +58,8 @@ public class Archivo {
         
     }
     
+    
+    
     /**
      * Abre un seleccionador de archivos, y devuelve el archivo seleccionado
      * @return

@@ -5,6 +5,7 @@
  */
 package Datos;
 
+import Archivo.IntervaloTiempo;
 import SQL.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,6 +45,7 @@ public class Cita {
                 }
             }
             }catch (Exception ex){
+            
             }
             
             fecha = elementoXML.getElementsByTagName("FECHA").item(0).getTextContent();
@@ -95,6 +97,22 @@ public class Cita {
                 allPdhConfirmed = true;
             }
             
+            //Verificamos si la hora de la cita esta dentro del rango del horario de trabajo del doctor
+            comando = "SELECT Horario_Entrada, Horario_Salida FROM MEDICO WHERE Codigo=(?)";
+            statement = connection.prepareStatement(comando);
+            statement.setString(1,medico);
+            ResultSet resultadoHorario = statement.executeQuery();
+            if(resultadoHorario.next()){
+                String horaPrimero = resultadoHorario.getString("Horario_Entrada");
+                String horaUltimo = resultadoHorario.getString("Horario_Salida");
+                IntervaloTiempo intervalo = new IntervaloTiempo(horaPrimero,horaUltimo);
+                if(intervalo.IsInDateRange(hora,fecha)==false){
+                    //Aprovechamos esta variable para denegar el ingreso de la cita
+                    allPdhConfirmed=false;
+                }
+            }
+            
+            
             //Condicion que indica si todas las especialidades las tiene el doc
             if(allPdhConfirmed==true){
                 comando = "INSERT INTO REGISTRO_CITAS (No_Registro,Fecha_Cita,Hora_Cita,Cita_Realizada,Codigo_Paciente,Codigo_Medico,Registro_Titulo,Registro_Consulta"
@@ -129,7 +147,7 @@ public class Cita {
                 statement.executeUpdate();
                 //Reiniciamos el arrayList
             }else{
-                JOptionPane.showMessageDialog(null, "No se encontraron todas las especialidades del doctor"+" size "+especialidad.size());
+                return false;
             }
             
             
@@ -138,7 +156,8 @@ public class Cita {
             return true;
         } catch (SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Los formatos de la cita: "+codigo+" son incorrectos "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Los formatos de la cita: "+codigo+" son incorrectos, el tipo de consulta no la puede manejar el doctor o el horario no"
+                    + "esta dentro de lo establecido o "+ex.getMessage());
             return false;
         }
     }

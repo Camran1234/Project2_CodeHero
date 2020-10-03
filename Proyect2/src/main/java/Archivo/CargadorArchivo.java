@@ -14,6 +14,7 @@ import Datos.Laboratorista;
 import Datos.Medico;
 import Datos.Paciente;
 import Datos.Resultado;
+import java.io.InputStream;
 import java.util.ArrayList;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -34,6 +35,58 @@ public class CargadorArchivo {
     public ArrayList<String> CargarArchivos(String path){
         ArrayList<String> nodosCargados = new ArrayList<>();
         convertidor.TransformarPathXML(path);
+        ArrayList<NodeList> listasNodos = convertidor.GetElements();
+        Element elementoLista;
+        NodeList listaAuxiliar;
+        Node nodo;
+        
+        for (int indexListaNodos=0; indexListaNodos<listasNodos.size();indexListaNodos++) {
+            listaAuxiliar = listasNodos.get(indexListaNodos);
+            
+            for(int indexElementos=0;indexElementos<listaAuxiliar.getLength();indexElementos++){
+                nodo = listaAuxiliar.item(indexElementos);
+                nodosCargados.add("Current node name: "+ nodo.getNodeName());
+                if(nodo.getNodeType() == Node.ELEMENT_NODE){
+                elementoLista = (Element) nodo; 
+                    switch(indexListaNodos){
+                        case 0:
+                            new Administrador().SubirArchivo(elementoLista);
+                            break;
+                        case 1:
+                            new Medico().SubirArchivo(elementoLista);
+                            break;
+                        case 2:
+                            new Laboratorista().SubirArchivo(elementoLista);
+                            break;
+                        case 3:
+                            new Paciente().SubirArchivo(elementoLista);
+                            break;
+                        case 4:
+                            new ExamenLaboratorio().SubirArchivo(elementoLista);
+                            break;
+                        case 5:
+                            new Informe().SubirArchivo(elementoLista);
+                            break;
+                        case 6:
+                            new Resultado().SubirArchivo(elementoLista);
+                            break;
+                        case 7:
+                            new Cita().SubirArchivo(elementoLista);
+                            break;
+                        case 8:
+                            new Consulta().SubirArchivo(elementoLista);
+                            break;
+                    }    
+                }
+                   
+            }
+        }
+        return nodosCargados;
+    }
+    
+    public ArrayList<String> CargarArchivosInputStream(InputStream path){
+        ArrayList<String> nodosCargados = new ArrayList<>();
+        convertidor.TransformarPathXMLInputStream(path);
         ArrayList<NodeList> listasNodos = convertidor.GetElements();
         Element elementoLista;
         NodeList listaAuxiliar;

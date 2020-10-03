@@ -5,6 +5,7 @@
  */
 package Archivo;
 import Archivo.Archivo;
+import java.io.InputStream;
 import java.util.ArrayList;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -59,4 +60,8 @@ public class ConvertidorXml {
     public ArrayList<NodeList> GetElements(){
         return this.listasXML;
     } 
+
+    void TransformarPathXMLInputStream(InputStream path) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
