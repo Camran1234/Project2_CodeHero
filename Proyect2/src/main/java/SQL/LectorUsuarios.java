@@ -18,6 +18,29 @@ import java.util.ArrayList;
 public class LectorUsuarios {
 
     /**
+     * Retorna el nombre de los medicos del sistema
+     * @return
+     */
+    public ArrayList<String> GetNombreMedicos(){
+        try {  
+            ArrayList<String> codigos = new ArrayList<>();
+            Connection connection = new Conexion().CreateConnection();
+            String comando = "SELECT Nombre FROM MEDICO ORDER BY Nombre";
+            PreparedStatement statement = null;
+            statement = connection.prepareStatement(comando);
+            ResultSet resultado = statement.executeQuery();
+            
+            while(resultado.next()){
+                codigos.add(resultado.getString("Nombre"));
+            }
+            return codigos;
+        } catch (SQLException ex) {
+               ex.printStackTrace();
+               return null;
+        }   
+    }
+    
+    /**
      * Funcion que devuelve los medicos de la base
      * de datos
      * @return

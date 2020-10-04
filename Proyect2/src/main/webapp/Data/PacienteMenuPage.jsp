@@ -27,6 +27,20 @@
     </div>
 </form>
     
+<form method="post" action="../Data/PacientesMostrarPendientes.jsp">
+    <div class="form-group">
+        <h4 style="text-align:center">Ver Citas y Examenes Pendientes</h4>
+        <input type="submit" class="form-control"  value="Ir"/>
+    </div>
+</form>
+    
+    <form method="post" action="../Reportes/ReporteUltimosExamenesP.jsp">
+    <div class="form-group">
+        <h4 style="text-align:center">Reportes</h4>
+        <input type="submit" class="form-control"  value="Ir"/>
+    </div>
+</form>
+    
 
     
 <a href="../menuInicio.jsp">Regresar</a>

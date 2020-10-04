@@ -20,7 +20,7 @@ public class OpcionesEspecialesLaboratorista {
 
     /**
      * Devuelve las pruebas de examenes pendientes de cierto tipo en el cual el laboratorista
-     * esta especializado
+     * esta especializado, solo los codigos
      * @param laboratorista
      * @return
      */
@@ -28,7 +28,7 @@ public class OpcionesEspecialesLaboratorista {
         try {   
             Connection connection = new Conexion().CreateConnection();
             String comando = "SELECT * FROM REGISTRO_EXAMEN WHERE "
-                    + "Codigo_Examen=(SELECT Codigo FROM EXAMENES_LABORATORIO WHERE"
+                    + " Codigo_Examen=(SELECT Codigo FROM EXAMENES_LABORATORIO WHERE"
                     + " Nombre=(SELECT Examen_trabajo FROM LABORATORISTA WHERE Codigo=(?)))";
             PreparedStatement statement = null;
             statement = connection.prepareStatement(comando);

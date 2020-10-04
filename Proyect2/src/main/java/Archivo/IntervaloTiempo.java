@@ -61,6 +61,14 @@ public class IntervaloTiempo {
         }
     }
     
+    public Date returnHoraInicial(){
+        return this.horaInicial;
+    }
+    
+    public Date returnHoraFinal(){
+        return this.horaFinal;
+    }
+    
     
     
 }

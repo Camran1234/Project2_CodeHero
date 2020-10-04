@@ -17,6 +17,10 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        new CargadorArchivo().CargarArchivos("/home/camran1234/Desktop/Documento.xml");
+        String cadena = "Lunes-Miercoles-Jueves-Sabado-";
+        String[] a = cadena.split("-");
+        for(int index=0; index<a.length; index++){
+            System.out.println(a[index]);
+        }
     }
 }
