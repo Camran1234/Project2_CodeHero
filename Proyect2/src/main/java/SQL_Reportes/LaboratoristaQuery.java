@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -33,25 +34,25 @@ public class LaboratoristaQuery {
             //Obtenemos los resultados
             Connection connection = new Conexion().CreateConnection();
             //Obtenemos los pacientes que mas informes hallan tenido o tambien que ya hallan completado las citas
-            String comando = "SELECT R.No_Registro, R.Orden_Medico, R.Hora, R.Fecha, P.Nombre, E.Nombre, M.Nombre FROM REGISTRO_EXAMENES R LEFT JOIN PACIENTE P ON R.Codigo_Paciente"
-                    + "=P.Codigo LEFT JOIN EXAMENES_LABORATORIO E ON R.Codigo_Examen=E.Codigo LEFT JOIN MEDICO M ON R.Codigo_Medico=M.Codigo WHERE R.No_Registro= ?"
-                    + "AND CAST(R.Fecha as date) = (SELECT CURRENT_DATE())";
+            String comando = "SELECT R.No_Registro, R.Orden_Medico, R.Hora, R.Fecha, P.Nombre, E.Nombre, M.Nombre FROM REGISTRO_EXAMEN R LEFT JOIN PACIENTE P ON R.Codigo_Paciente"
+                    + "=P.Codigo LEFT JOIN EXAMENES_LABORATORIO E ON R.Codigo_Examen=E.Codigo LEFT JOIN MEDICO M ON R.Codigo_Medico=M.Codigo WHERE R.Codigo_Examen= (SELECT Codigo FROM EXAMENES_LABORATORIO WHERE"
+                    + " Nombre=(SELECT Examen_trabajo FROM LABORATORISTA WHERE Codigo=(?)))"
+                    + "AND CAST(R.Fecha as date) = (SELECT CURRENT_DATE()) GROUP BY R.No_Registro";
             PreparedStatement statement = null;
-            //Obtenemos las columnas para dar una lista de datos mas informativa
-            for(String listaCodigoExamen:listaCodigosExamenes){
-                statement = connection.prepareStatement(comando);
-                statement.setString(1, codigoLaboratorista);
-                ResultSet resultado = statement.executeQuery();
-                if(resultado.next()){
-                    listaExamenes.add(resultado.getString("R.No_Registro"));
-                    listaExamenes.add(resultado.getString("R.Orden_Medico"));
-                    listaExamenes.add(resultado.getString("R.Hora"));
-                    listaExamenes.add(resultado.getString("R.Fecha"));
-                    listaExamenes.add(resultado.getString("P.Nombre"));
-                    listaExamenes.add(resultado.getString("E.Nombre"));
-                    listaExamenes.add(resultado.getString("M.Nombre"));
-                }
+            //Obtenemos las columnas para dar una lista de datos mas informativa                
+            statement = connection.prepareStatement(comando);            
+            statement.setString(1, codigoLaboratorista);            
+            ResultSet resultado = statement.executeQuery();            
+            if(resultado.next()){            
+                listaExamenes.add(resultado.getString("R.No_Registro"));                
+                listaExamenes.add(resultado.getString("R.Orden_Medico"));                
+                listaExamenes.add(resultado.getString("R.Hora"));                
+                listaExamenes.add(resultado.getString("R.Fecha"));                
+                listaExamenes.add(resultado.getString("P.Nombre"));                
+                listaExamenes.add(resultado.getString("E.Nombre"));                
+                listaExamenes.add(resultado.getString("M.Nombre"));                
             }
+            
             connection.close();
             return listaExamenes;
         } catch (SQLException ex) {
@@ -127,7 +128,7 @@ public class LaboratoristaQuery {
             }
             
             String[] diasSeparados = dias.split("-");
-            
+            //Lo transformamos en numero para que nos acepte la funcion de DAYWEEk en sql
             for(String diaSeparado:diasSeparados){
                 switch(diaSeparado){
                     case "Lunes":
@@ -142,17 +143,21 @@ public class LaboratoristaQuery {
                     case "Jueves":
                         listaDias.add("5");
                         break;
-                    case "Sabado":
+                    case "Viernes":
                         listaDias.add("6");
                         break;
-                    case "Domingo":
+                    case "Sabado":
                         listaDias.add("7");
+                        break;                        
+                    case "Domingo":
+                        listaDias.add("1");
                         break;
                 }
             }
             
             int contadora=0;
             String diaResultado = null;
+            //Obtenemos los dias de la semana con el codigo de laboratorista y en cierta fecha
             comando="SELECT DAYOFWEEK(Fecha), R.No_Registro, R.Orden, R.Informe, R.Fecha, R.Hora, P.Nombre, M.Nombre, E.Nombre "
                     + " FROM RESULTADO R LEFT JOIN PACIENTE P ON R.Paciente=P.Codigo "
                     + " LEFT JOIN MEDICO M ON R.Medico = M.Codigo LEFT JOIN EXAMENES_LABORATORIO E ON R.Examen = E.Codigo "
@@ -160,13 +165,13 @@ public class LaboratoristaQuery {
             
             statement = connection.prepareStatement(comando);
             statement.setString(1, codigoLaboratorista);
-            statement.setString(1, fechaInicio);
-            statement.setString(1, fechaFinal);
+            statement.setString(2, fechaInicio);
+            statement.setString(3, fechaFinal);
             resultado = statement.executeQuery();
-            
             
             while(resultado.next()){
                 diaResultado = resultado.getString("DAYOFWEEK(Fecha)");
+                //Si los dias son similares subimos la lista
                 if(listaDias.contains(diaResultado)){
                     listaExamenes.add(resultado.getString("R.No_Registro"));                                
                     listaExamenes.add(resultado.getString("R.Orden"));                                
@@ -202,17 +207,15 @@ public class LaboratoristaQuery {
             String comando="SELECT DAYOFWEEK(Fecha), R.No_Registro, R.Orden, R.Informe, R.Fecha, R.Hora, P.Nombre, M.Nombre, E.Nombre "
                     + " FROM RESULTADO R LEFT JOIN PACIENTE P ON R.Paciente=P.Codigo "
                     + " LEFT JOIN MEDICO M ON R.Medico = M.Codigo LEFT JOIN EXAMENES_LABORATORIO E ON R.Examen = E.Codigo "
-                    + " WHERE R.Laboratorista=? GROUP BY R.Fecha  ORDER BY Count(*) ";
+                    + " WHERE R.Laboratorista=? GROUP BY R.Fecha  ORDER BY Count(*) DESC LIMIT 10";
             PreparedStatement statement = null;
             //Obtenemos las columnas para dar una lista de datos mas informativa
             statement = connection.prepareStatement(comando);
             statement.setString(1, codigoLaboratorista);
             ResultSet resultado = statement.executeQuery();
             while(resultado.next()){            
-                listaExamenes.add(resultado.getString("R.No_Registro"));                
-                listaExamenes.add(resultado.getString("R.Orden"));                
+                listaExamenes.add(resultado.getString("R.No_Registro"));                                
                 listaExamenes.add(resultado.getString("R.Fecha"));                
-                listaExamenes.add(resultado.getString("R.Hora"));
                 listaExamenes.add(resultado.getString("P.Nombre"));
                 listaExamenes.add(resultado.getString("E.Nombre"));
                 listaExamenes.add(resultado.getString("M.Nombre"));    

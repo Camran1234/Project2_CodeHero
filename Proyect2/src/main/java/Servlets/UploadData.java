@@ -89,6 +89,8 @@ public class UploadData extends HttpServlet {
                         path = filePath;
                         if(path !=null){
                             request.getSession().setAttribute("urlArchivoMenu", path);
+                        }else{
+                            request.getSession().setAttribute("urlArchivoMenu", " ");
                         }
                         File storeFile = new File(filePath);
                         // saves the file on disk
@@ -100,6 +102,7 @@ public class UploadData extends HttpServlet {
             String error = ex.getMessage();
             String error2 = ex.toString();
             request.getSession().setAttribute("error", error + error2);
+            ex.printStackTrace();
         }
         
                 // redireccionamos a la pagina correspondiente segun el atributo establecido en la sesion
@@ -111,7 +114,19 @@ public class UploadData extends HttpServlet {
         request.getSession().setAttribute("registroRC", request.getParameter("registroR"));
         request.getSession().setAttribute("fechaRC", request.getParameter("fechaR"));
         request.getSession().setAttribute("horaRC", request.getParameter("horaR"));
-        }else{
+        String opcionMedico = request.getParameter("opcionMedico");
+        try{
+            if(opcionMedico!=null){
+                if(opcionMedico.equalsIgnoreCase("")==false){
+                    request.getSession().setAttribute("actualMedico", opcionMedico);    
+                }
+            }
+            
+        }catch(Exception e){
+            
+        }
+        
+        }else {
         request.getSession().setAttribute("codigoExamenL", request.getParameter("opcion"));
         request.getSession().setAttribute("registroL",request.getParameter("registro"));
         request.getSession().setAttribute("fechaL", request.getParameter("fecha"));

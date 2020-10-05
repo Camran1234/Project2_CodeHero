@@ -135,7 +135,10 @@ input.ex1 {
     
 </form>
         
-<form method="post" action="../Data/adminReportes.jsp">
-    <input class="ex1" type="submit" style="margin:0px auto; display:block;" value = "Reportes"/> <br>
+<form method="post" action="../Reportes/ReporteCitasAgendadasM.jsp">
+    <div class="form-group">
+        <h4 style="text-align:center">Reportes</h4>
+        <input type="submit" class="form-control"  value="Ir"/>
+    </div>
 </form>
 <a href="../menuInicio.jsp">Regresar</a>

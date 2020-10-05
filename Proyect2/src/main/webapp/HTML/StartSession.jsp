@@ -25,6 +25,8 @@
     }
     session.setAttribute("codigoSession", usuario);
     session.setAttribute("passwordSession", password);
+    //Para la carga de archivos
+    session.setAttribute("selectMedico", false);
     
     String respuesta = new CorroboradorUsuario().CheckLogIn(usuario, password);
     if(respuesta!=null){

@@ -45,7 +45,7 @@
                 <input type="text" class="form-control" name="registro" placeholder="Numero Registro Cita" required>
         </div>
         <div class="form-group">
-                <label>Fecha Cita</label>
+                <label>Fecha Cita (Debe ser un dia despues del actual)</label>
                 <input type="date" name="fecha" value="2000-01-01" min="1900-01-01" max="2050-01-01" required>
         </div>
         <div class="form-group">

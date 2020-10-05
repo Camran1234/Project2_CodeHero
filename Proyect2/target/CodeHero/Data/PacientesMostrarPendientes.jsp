@@ -57,7 +57,7 @@
           </tbody>
         </table></br>
         
-        <h3> Citas Pendientes: </h3>
+        <h3> Examenes Pendientes: </h3>
         <table class="table table-borderless table-dark">
           <thead>
             <tr>

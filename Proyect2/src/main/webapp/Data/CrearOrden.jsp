@@ -15,6 +15,11 @@
                 String hora = (String) session.getAttribute("horaRC");
                 String medico = (String) session.getAttribute("codigoSession");
                 String orden = (String) session.getAttribute("urlArchivoMenu");
+                Boolean selectMultipleMedico = (Boolean) session.getAttribute("selectMedico");
+                if(selectMultipleMedico){
+                    medico = (String) session.getAttribute("actualMedico");
+                    session.setAttribute("selectMedico", false);
+                }
                 %>
 
 <!DOCTYPE html>

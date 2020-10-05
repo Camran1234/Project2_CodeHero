@@ -45,7 +45,6 @@ public class AdministradorQuery {
                 listaCitas.add(resultado.getString("COUNT(*)"));
                 listaCitas.add(resultado.getString("R.Codigo_Medico"));
                 listaCitas.add(resultado.getString("M.Nombre"));
-                listaCitas.add(resultado.getString("R.Fecha_Cita"));
             }
             connection.close();
             return listaCitas;
@@ -58,7 +57,7 @@ public class AdministradorQuery {
     
     /**
      * Codigo, nombre medico y total de las sumas ya realizadas
-     * 3 columnas
+     * 3 columnas, codigo, nombre, y total
      * @param fechaInicio
      * @param fechaFinal
      * @return
@@ -69,39 +68,20 @@ public class AdministradorQuery {
             //Obtenemos los resultados
             Connection connection = new Conexion().CreateConnection();
             //Obtenemos de primero la cantidad que se repite cada 
-            String comando = "SELECT Count(*) AS Cantidad, R.Codigo_Medico AS Codigo_Medico, M.Nombre AS Nombre_Medico, (Count(*)*C.Costo) AS Total "
-                    + " FROM REGISTRO_CITAS R LEFT JOIN MEDICO M ON R.Codigo_Medico=M.Codigo "
-                    + " LEFT JOIN CONSULTA C ON R.Registro_Consulta= C.Codigo  "
-                    + " WHERE Cita_Realizada=true AND CAST(R.Fecha_Cita as date) BETWEEN ? AND ? GROUP BY Registro_Titulo ORDER BY COUNT(*)";
+            String comando = "SELECT T.Cantidad, T.Codigo_Medico, T.Nombre_Medico, sum(Total) "
+                    + " FROM (SELECT Count(*) AS Cantidad, R.Codigo_Medico AS Codigo_Medico, M.Nombre AS Nombre_Medico, (Count(*)*C.Costo) AS Total "
+                    + " FROM REGISTRO_CITAS R LEFT JOIN MEDICO M ON R.Codigo_Medico=M.Codigo LEFT JOIN CONSULTA C ON R.Registro_Consulta= C.Codigo "
+                    + " WHERE Cita_Realizada=true AND CAST(R.Fecha_Cita as date) BETWEEN ? AND ? GROUP BY Registro_Titulo ORDER BY COUNT(*)) AS T "
+                    + " GROUP BY Codigo_Medico ORDER BY sum(Total) desc";
             PreparedStatement statement = null;
             statement = connection.prepareStatement(comando);
             statement.setString(1, fechaInicio);
             statement.setString(2, fechaFinal);
             ResultSet resultado = statement.executeQuery();
-            Double total=0.00;
-            String codigoMedicoAuxiliar = "";
-            String codigoMedicoActual;
-            Boolean primeraVez = true;
             while(resultado.next()){
-                //Codigo para sumar los totales de los mismos nombres
-                codigoMedicoActual = resultado.getString("Codigo_Medico");
-                if(codigoMedicoAuxiliar.equalsIgnoreCase(codigoMedicoActual) == true){
-                    total += resultado.getDouble("Total");
-                }else{                    
-                    if(primeraVez){
-                        listaCitas.add(resultado.getString("Codigo_Medico"));
-                        listaCitas.add(resultado.getString("Nombre_Medico"));
-                        total += resultado.getDouble("Total");
-                        primeraVez=false;
-                    }else{
-                        listaCitas.add(Double.toString(total));
-                        total = 0.00;
-                        total += resultado.getDouble("Total");
-                        listaCitas.add(resultado.getString("Codigo_Medico"));
-                        listaCitas.add(resultado.getString("Nombre_Medico"));
-                    }
-                    codigoMedicoAuxiliar = codigoMedicoActual;
-                }
+                listaCitas.add(resultado.getString("Codigo_Medico"));
+                listaCitas.add(resultado.getString("Nombre_Medico"));
+                listaCitas.add(resultado.getString("sum(Total)"));
             }
             connection.close();
             return listaCitas;
@@ -164,8 +144,8 @@ public class AdministradorQuery {
             Connection connection = new Conexion().CreateConnection();
             //Obtenemos los pacientes que mas informes hallan tenido o tambien que ya hallan completado las citas
             String comando = "SELECT COUNT(*) AS Cantidad,M.Codigo_Examen, E.Nombre FROM"
-                    + "(SELECT Codigo_Examen AS Codigo_Examen FROM REGISTRO_EXAMEN WHERE"
-                    + " CAST(Fecha as date) BETWEEN ? ADN ? UNION ALL "
+                    + " (SELECT Codigo_Examen AS Codigo_Examen FROM REGISTRO_EXAMEN WHERE"
+                    + " CAST(Fecha as date) BETWEEN ? AND ? UNION ALL "
                     + " SELECT Examen AS Codigo_Examen FROM RESULTADO WHERE CAST(Fecha as date) BETWEEN ? AND ?) AS M "
                     + " LEFT JOIN EXAMENES_LABORATORIO E ON M.Codigo_Examen=E.Codigo"
                     + " GROUP BY M.Codigo_Examen ORDER BY COUNT(*) DESC";
@@ -178,9 +158,9 @@ public class AdministradorQuery {
             ResultSet resultado = statement.executeQuery();
             
             while(resultado.next()){
-                listaCitas.add(resultado.getString("CANTIDAD"));
-                listaCitas.add(resultado.getString("Codigo"));
-                listaCitas.add(resultado.getString("Examen"));
+                listaCitas.add(resultado.getString("Cantidad"));
+                listaCitas.add(resultado.getString("M.Codigo_Examen"));
+                listaCitas.add(resultado.getString("E.Nombre"));
             }
             connection.close();
             return listaCitas;
@@ -192,6 +172,8 @@ public class AdministradorQuery {
     
     /**
      * Obtiene los medicos que han demandado mayor cantidad de examenes y colocar 3 de los mas pedidos en cierta fecha
+     * Columnas codigo, cantidad, nombre, codigo Examen, Nombre Examen
+     * No. Columnas: 5
      * @param fechaInicio
      * @param fechaFinal
      * @return
@@ -216,13 +198,13 @@ public class AdministradorQuery {
                 String codigo = resultado.getString("CODIGO");
                 String codigoExamen = "";
                 String nombreExamen = "";
-                listaCitas.add(resultado.getString("CANTIDAD"));
                 listaCitas.add(codigo);
+                listaCitas.add(resultado.getString("CANTIDAD"));
                 listaCitas.add(resultado.getString("NOMBRE"));
                 
                 String comando2 = "SELECT M.EXAMEN, E.Nombre "
-                        + " FROM (SELECT Codigo_Examen AS EXAMEN FROM REGISTRO_EXAMEN WHERE Codigo_Medico=? AND CAST(Fechas as date) BETWEEN ? AND ? UNION"
-                        + " SELECT Examen FROM RESULTADO WHERE Medico=? AND CAST(Fechas as date) BETWEEN ? AND ?)"
+                        + " FROM (SELECT Codigo_Examen AS EXAMEN FROM REGISTRO_EXAMEN WHERE Codigo_Medico=? AND CAST(Fecha as date) BETWEEN ? AND ? UNION"
+                        + " SELECT Examen FROM RESULTADO WHERE Medico=? AND CAST(Fecha as date) BETWEEN ? AND ?)"
                         + " AS M LEFT JOIN EXAMENES_LABORATORIO E ON M.EXAMEN=E.Codigo LIMIT 3";
                 PreparedStatement statement2 = connection.prepareStatement(comando2);
                 statement2.setString(1, codigo);
@@ -251,6 +233,7 @@ public class AdministradorQuery {
     
     /**
      * Retorna los ingresos generados por cada paciente que ha pedido y completado una cita
+     * Codigo, nombre y total
      * @param fechaInicio
      * @param fechaFinal
      * @return
@@ -260,41 +243,23 @@ public class AdministradorQuery {
             ArrayList<String> listaCitas = new ArrayList<>();
             //Obtenemos los resultados
             Connection connection = new Conexion().CreateConnection();
-            //Obtenemos de primero la cantidad que se repite cada 
-            String comando = " SELECT COUNT(*) AS CANTIDAD, R.Codigo_Paciente AS Codigo_Paciente, P.Nombre AS Nombre_Paciente, (Count(*)*C.Costo) AS Total 4"
-                    + " FROM REGISTRO_CITAS R LEFT JOIN PACIENTE P ON R.Codigo_Paciente=P.Codigo "
-                    + " LEFT JOIN CONSULTA C ON R.Registro_Consulta = C.Codigo "
-                    + " WHERE Cita_Realizada=true AND CAST(R.Fecha_Cita as date) BETWEEN ? AND ? "
-                    + " GROUP BY Registro_Titulo ORDER BY COUNT(*)";
+            //Obtenemos de primero la cantidad que se repite cada                     
+            String comando = "SELECT T.CANTIDAD, T.Codigo_Paciente, T.Nombre_Paciente, sum(Total) "            
+                    + " FROM (SELECT COUNT(*) AS CANTIDAD, R.Codigo_Paciente AS Codigo_Paciente, P.Nombre AS Nombre_Paciente, (Count(*)*C.Costo) AS Total "                    
+                    + " FROM REGISTRO_CITAS R LEFT JOIN PACIENTE P ON R.Codigo_Paciente=P.Codigo LEFT JOIN CONSULTA C ON R.Registro_Consulta = C.Codigo "                    
+                    + " WHERE Cita_Realizada=true AND CAST(R.Fecha_Cita as date) BETWEEN ? AND ? GROUP BY Registro_Titulo ORDER BY COUNT(*)) AS T "
+                    + " GROUP BY Codigo_Paciente ORDER BY sum(Total) desc";
+                    
             PreparedStatement statement = null;
             statement = connection.prepareStatement(comando);
             statement.setString(1, fechaInicio);
             statement.setString(2, fechaFinal);
             ResultSet resultado = statement.executeQuery();
-            Double total=0.00;
-            String codigoMedicoAuxiliar = "";
-            String codigoMedicoActual;
-            Boolean primeraVez = true;
             while(resultado.next()){
+                listaCitas.add(resultado.getString("Codigo_Paciente"));                        
+                listaCitas.add(resultado.getString("Nombre_Paciente"));
+                listaCitas.add(resultado.getString("sum(Total)"));
                 //Codigo para sumar los totales de los mismos nombres
-                codigoMedicoActual = resultado.getString("Codigo_Paciente");
-                if(codigoMedicoAuxiliar.equalsIgnoreCase(codigoMedicoActual) == true){
-                    total += resultado.getDouble("Total");
-                }else{                    
-                    if(primeraVez){
-                        listaCitas.add(resultado.getString("Codigo_Paciente"));
-                        listaCitas.add(resultado.getString("Nombre_Paciente"));
-                        total += resultado.getDouble("Total");
-                        primeraVez=false;
-                    }else{
-                        listaCitas.add(Double.toString(total));
-                        total = 0.00;
-                        total += resultado.getDouble("Total");
-                        listaCitas.add(resultado.getString("Codigo_Paciente"));
-                        listaCitas.add(resultado.getString("Nombre_Paciente"));
-                    }
-                    codigoMedicoAuxiliar = codigoMedicoActual;
-                }
             }
             connection.close();
             return listaCitas;

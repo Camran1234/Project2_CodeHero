@@ -21,7 +21,7 @@
     %>
 
 <!DOCTYPE html>
-<form method="post" action="../UploadData">
+<form method="post" action="../UploadData" >
     <div class="form-group">
         <h4 style="text-align:center">Confirmar Examen</h4>
         <label> Examenes Pendientes</label>
@@ -59,4 +59,11 @@
     </div>
     <input type="submit" class="ex1" style="margin:0px auto; display:block;" name="boton" value="Completar Examen" size="50%" required/><br>
 </form>
+        
+        <form method="post" action="../Reportes/ReporteExamenesRealizadosDiaL.jsp">
+    <div class="form-group">
+        <h4 style="text-align:center">Reportes</h4>
+        <input type="submit" class="form-control"  value="Ir"/>
+    </div>
+    </form>
 <a href="../menuInicio.jsp">Regresar</a>
