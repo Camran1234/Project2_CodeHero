@@ -21,7 +21,7 @@
     %>
 
 <!DOCTYPE html>
-<form method="post" action="../UploadData" >
+<form method="post" action="../UploadData" enctype="multipart/form-data">
     <div class="form-group">
         <h4 style="text-align:center">Confirmar Examen</h4>
         <label> Examenes Pendientes</label>

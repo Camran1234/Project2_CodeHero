@@ -10,7 +10,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     LectorUsuarios lector = new LectorUsuarios();
-    String pacienteCodigo = (String) session.getAttribute("codigoSession");
     %>
     
     <form method="post" action="../Data/IngresarCita.jsp">
@@ -19,7 +18,7 @@
             
          <div class="form-group">
                 <label>Paciente</label>
-                <input type="text" class="form-control" name="nombrePaciente" value=<%=pacienteCodigo%>  readonly />
+                <input type="text" class="form-control" name="nombrePaciente" value=<%=(String) session.getAttribute("codigoSession")%>  readonly />
         </div>
                 <label>Codigo Medico</label>
                 <select name="opcionListaMedico" class="form-group"  required>

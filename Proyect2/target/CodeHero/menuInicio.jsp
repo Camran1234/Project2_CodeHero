@@ -18,7 +18,7 @@
         <title>Menu Start Page</title>
     </head>
     <body>
-        <h1 style="text-align:center">HOSPITAL</h1>
+        <h1 style="text-align:center">HOSPITAL CODE HERO</h1>
         <id style="text-align:center">
         <%-- Utilizaremos un sertvlet que tenga la capacidad de cargar 
 el archivo --%>

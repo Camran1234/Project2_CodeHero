@@ -71,7 +71,7 @@ input.ex1 {
     <input type="submit" class="ex1" style="margin:0px auto; display:block;" name="boton" value="Completar Cita" size="50%" required/><br>
 </form> 
         
-<form method="post" action="../UploadData" >
+        <form method="post" action="../UploadData" enctype="multipart/form-data">
     <div class="form-group">
         <h4 style="text-align:center">Subir Requerimiento Examen</h4>
         <label> Pacientes Asignados</label>

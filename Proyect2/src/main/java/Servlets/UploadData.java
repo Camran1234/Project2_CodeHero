@@ -8,7 +8,10 @@ package Servlets;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.JOptionPane;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
@@ -73,16 +77,16 @@ public class UploadData extends HttpServlet {
         if (uploadDir.exists() == false) {
             uploadDir.mkdirs();
         }
-        
+        // redireccionamos a la pagina correspondiente segun el atributo establecido en la sesion
+        String urlRedireccion = (String) request.getSession().getAttribute("paginaRedireccionar");
         try {
             // parses the request's content to extract file data
-            @SuppressWarnings("unchecked")
             List<FileItem> formItems = upload.parseRequest(request);
- 
             if (formItems != null && formItems.size() > 0) {
                 // iterates over form's fields
                 for (FileItem item : formItems) {
                     // processes only fields that are not form fields
+                    //Para conseguir la path del archivo subido
                     if (!item.isFormField()) {
                         String fileName = new File(item.getName()).getName();
                         String filePath = uploadPath + File.separator + fileName;
@@ -95,6 +99,57 @@ public class UploadData extends HttpServlet {
                         File storeFile = new File(filePath);
                         // saves the file on disk
                         item.write(storeFile);
+                    } else if (item.isFormField()) {
+                        //Convertimos los items en su nombre y valor, verificamos a cada uno para enviarlo a sus respectivos lugares
+                        String nombreInput = item.getFieldName();
+                        String valorInput = item.getString();
+                        if(urlRedireccion.equalsIgnoreCase("./Data/CrearOrden.jsp")){
+                            switch(nombreInput){
+                                case "opcionListaR":
+                                    request.getSession().setAttribute("pacienteR", valorInput);
+                                    break;    
+                                case "opcionExamenesR":
+                                    request.getSession().setAttribute("examenR", valorInput);
+                                    break;    
+                                case "registroR":
+                                    request.getSession().setAttribute("registroRC", valorInput);
+                                    break;    
+                                case "fechaR":
+                                    request.getSession().setAttribute("fechaRC", valorInput);
+                                    break;    
+                                case "horaR":
+                                    request.getSession().setAttribute("horaRC", valorInput);
+                                    break;    
+                                case "opcionMedico":
+                                    String opcionMedico = valorInput;
+                                    //Condicion que nos permite recibir al nombre de nuestro doctor
+                                    try{
+                                        if(opcionMedico!=null){
+                                            if(opcionMedico.equalsIgnoreCase("")==false){
+                                                request.getSession().setAttribute("actualMedico", opcionMedico);    
+                                            }
+                                        }
+                                    }catch(Exception e){
+                                        e.printStackTrace();
+                                    }
+                                    break;
+                            } 
+                        }else{
+                            switch(nombreInput){
+                                case"opcion":
+                                    request.getSession().setAttribute("codigoExamenL", valorInput);
+                                    break;                                    
+                                case"registro":
+                                    request.getSession().setAttribute("registroL",valorInput);
+                                    break;                                    
+                                case"fecha":
+                                    request.getSession().setAttribute("fechaL", valorInput);
+                                    break;                                    
+                                case"hora":
+                                    request.getSession().setAttribute("horaL", valorInput);
+                                    break;
+                            }
+                        }
                     }
                 }
             }
@@ -105,34 +160,39 @@ public class UploadData extends HttpServlet {
             ex.printStackTrace();
         }
         
-                // redireccionamos a la pagina correspondiente segun el atributo establecido en la sesion
-        String urlRedireccion = (String) request.getSession().getAttribute("paginaRedireccionar");
+                
         
-        if(urlRedireccion.equalsIgnoreCase("./Data/CrearOrden.jsp")){
-        request.getSession().setAttribute("pacienteR", request.getParameter("opcionListaR"));
-        request.getSession().setAttribute("examenR", request.getParameter("opcionExamenesR"));
-        request.getSession().setAttribute("registroRC", request.getParameter("registroR"));
-        request.getSession().setAttribute("fechaRC", request.getParameter("fechaR"));
-        request.getSession().setAttribute("horaRC", request.getParameter("horaR"));
-        String opcionMedico = request.getParameter("opcionMedico");
-        try{
-            if(opcionMedico!=null){
-                if(opcionMedico.equalsIgnoreCase("")==false){
-                    request.getSession().setAttribute("actualMedico", opcionMedico);    
-                }
-            }
-            
-        }catch(Exception e){
-            
-        }
+
         
-        }else {
-        request.getSession().setAttribute("codigoExamenL", request.getParameter("opcion"));
-        request.getSession().setAttribute("registroL",request.getParameter("registro"));
-        request.getSession().setAttribute("fechaL", request.getParameter("fecha"));
-        request.getSession().setAttribute("horaL", request.getParameter("hora"));
-       
-        }
+//          Codigo Antiguo, no funcional, ya que no se puede hacer request.getParameter() o derivados si se llama a un
+//                  form con encytipe="multi-form data"
+//        if(urlRedireccion.equalsIgnoreCase("./Data/CrearOrden.jsp")){
+//            
+//            
+//        request.getSession().setAttribute("pacienteR", request.getParameter("opcionListaR"));
+//        request.getSession().setAttribute("examenR", request.getParameter("opcionExamenesR"));
+//        request.getSession().setAttribute("registroRC", request.getParameter("registroR"));
+//        request.getSession().setAttribute("fechaRC", request.getParameter("fechaR"));
+//        request.getSession().setAttribute("horaRC", request.getParameter("horaR"));
+//        String opcionMedico = request.getParameter("opcionMedico");
+//        try{
+//            if(opcionMedico!=null){
+//                if(opcionMedico.equalsIgnoreCase("")==false){
+//                    request.getSession().setAttribute("actualMedico", opcionMedico);    
+//                }
+//            }
+//            
+//        }catch(Exception e){
+//            e.printStackTrace();
+//        }
+//        
+//        }else {
+//        request.getSession().setAttribute("codigoExamenL", request.getParameter("opcion"));
+//        request.getSession().setAttribute("registroL",request.getParameter("registro"));
+//        request.getSession().setAttribute("fechaL", request.getParameter("fecha"));
+//        request.getSession().setAttribute("horaL", request.getParameter("hora"));
+//       
+//        }
         response.sendRedirect(urlRedireccion);
     }
 
