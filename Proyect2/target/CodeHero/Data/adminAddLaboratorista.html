@@ -1,0 +1,53 @@
+<form action="../addNewData" method="post"><!-- Esta parte mostrara una interfaz del medico -->
+                <h1>Laboratorista</h1>
+                <label>
+                    Codigo: 
+                    <input type="text"  name="codigoM" placeholder="Ingrese codigo laboratorista" required/> <br>
+                </label>
+                <label>
+                    Nombre: 
+                    <input type="text"  name="nombre" placeholder="Ingrese nombre laboratorista" required/> <br>
+                </label>
+                <label>
+                    Password: 
+                    <input type="text"  name="password" placeholder="Ingrese password laboratorista" required/> <br>
+                </label>
+                <label>
+                    Numero Registro de Salud
+                    <input type="text"  name="registro" placeholder="Ingrese numero registro laboratorista" required/> <br>
+                </label>
+                <label>
+                    DPI: 
+                    <input type="text"  name="dpi" placeholder="Ingrese DPI laboratorista" required/> <br>
+                </label>
+                <label>
+                    Telefono: 
+                    <input type="text"  name="telefono" placeholder="Ingrese telefono laboratorista" required/> <br>
+                </label>
+                <label>
+                    Examen especializado:  
+                    <input type="text"  name="examenTrabajo" placeholder="Ingrese examen laboratorista" required/> <br>
+                </label>
+                <div>
+                    <label>
+                        Dias Trabajados:
+                        <input type="checkbox" name="Lunes" value="Lunes" />Lunes
+                        <input type="checkbox" name="Martes" value="Martes" />Martes
+                        <input type="checkbox" name="Miercoles" value="Miercoles" />Miercoles
+                        <input type="checkbox" name="Jueves" value="Jueves" />Jueves
+                        <input type="checkbox" name="Viernes" value="Viernes" />Viernes
+                        <input type="checkbox" name="Sabado" value="Sabado" />Sabado
+                        <input type="checkbox" name="Domingo" value="Domingo" />Domingo
+                        <br /> 
+                    </label>
+                </div>
+                <label>
+                    Correo Electronico:  
+                    <input type="text"  name="correo" placeholder="Ingrese correo laboratorista" required/> <br>
+                </label>
+                <label>
+                    Fecha donde inicio el trabajo: 
+                    <input type="date" name="fechaInicio" value="2000-01-01" min="1900-01-01" max="2030-01-01">
+                </label>
+                <input type="submit"  name = "boton" value = "Ingresar Laboratorista"/> <br>
+            </form>
